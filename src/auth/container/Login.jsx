@@ -2,21 +2,29 @@ import React from "react";
 import { Input, Form, Row, Col, Button, PageHeader, Typography } from "antd";
 import { UserOutlined, KeyOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setinput, newaccount } from "../state/index";
+import { setemail, setpass } from "../state/index";
 import { useHistory } from "react-router-dom";
+import { authService } from "../../fbase";
 export default function Login() {
+  const inputs = useSelector((state) => state.auth.inputs);
+  const { email, password } = inputs;
   const history = useHistory();
-  const currUser = useSelector((state) => state.auth.currUser);
-  const account = useSelector((state) => state.auth.newaccount);
-  const { email, password, nickname } = currUser;
-  console.log(currUser);
   const dispatch = useDispatch();
-  function onFinish({ email, password }) {
-    dispatch(setinput(email, password));
-  }
-  function onClick() {
-    dispatch(account());
-  }
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "email":
+        return dispatch(setemail(value));
+      case "password":
+        return dispatch(setpass(value));
+      default:
+        return null;
+    }
+  };
+  const onSignIn = async () => {
+    await authService.signInWithEmailAndPassword(email, password);
+    history.push("/");
+  };
   return (
     <>
       <Row justify="center" style={{ padding: 20 }}>
@@ -37,41 +45,48 @@ export default function Login() {
       </Row>
       <Row justify="center" style={{ marginTop: 20 }}>
         <Col xs={18} sm={12} xl={6}>
-          <Form onFinish={onFinish}>
+          <Form>
             <Form.Item
-              name="email"
               rules={[{ required: true, message: "email을 입력해 주세요!" }]}
             >
               <Input
                 size="large"
                 type="text"
+                name="email"
+                value={email}
+                onChange={onChange}
                 placeholder="ID를 입력해 주세요."
                 prefix={<UserOutlined />}
               />
             </Form.Item>
             <Form.Item
-              name="password"
               rules={[{ required: true, message: "password를 입력해 주세요!" }]}
             >
               <Input
                 size="large"
                 type="password"
+                name="password"
+                value={password}
+                onChange={onChange}
                 placeholder="PASSWORD를 입력해 주세요."
                 prefix={<KeyOutlined />}
               />
             </Form.Item>
-            <Input
-              style={{ marginTop: 5, background: "#1890ff", color: "#fff" }}
-              size="large"
-              type="submit"
-              value="로그인"
-            />
           </Form>
+          <Button style={{ width: "100%" }} type="primary" onClick={onSignIn}>
+            로그인
+          </Button>
         </Col>
       </Row>
       <Row justify="center" style={{ marginTop: 5 }}>
         <Col xs={18} sm={12} xl={6}>
-          <Button onClick={onClick}>회원가입</Button>
+          <Button
+            onClick={() => {
+              history.push("/account");
+            }}
+          >
+            회원가입
+          </Button>
         </Col>
       </Row>
     </>

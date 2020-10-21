@@ -1,33 +1,21 @@
 import produce from "immer";
 
 const REQUEST = "auth/REQUEST";
-const SET_INPUST = "auth/SET_INPUST";
+const SET_EMAIL = "auth/SET_EMAIL";
+const SET_PASSWORD = "auth/SET_PASSWORD";
 const FAIL = "auth/FAIL";
-const NEW_ACCOUNT = "auth/NEW_ACCOUNT";
 
 export const request = () => ({ type: REQUEST });
-export const setinput = (email, password, nickname) => ({
-  type: SET_INPUST,
-  email,
-  password,
-  nickname,
-});
+export const setemail = (email) => ({ type: SET_EMAIL, email });
+export const setpass = (password) => ({ type: SET_PASSWORD, password });
 export const fail = (error) => ({ type: FAIL, error });
-export const account = () => ({ type: NEW_ACCOUNT });
 
 const INITIAL_STATE = {
   isLoading: null,
   isError: null,
-  newaccount: false,
   inputs: {
     email: "",
     password: "",
-    nickname: "",
-  },
-  createUser: {
-    email: "",
-    password: "",
-    nickname: "",
   },
 };
 
@@ -37,24 +25,21 @@ export default function auth(state = INITIAL_STATE, action) {
       return produce(state, (draft) => {
         draft.isLoading = true;
       });
-    case SET_INPUST:
+    case SET_EMAIL:
       return produce(state, (draft) => {
         draft.isLoading = false;
-        draft.currUser = {
-          email: action.email,
-          password: action.password,
-          nickname: null,
-        };
+        draft.inputs.email = action.email;
+      });
+    case SET_PASSWORD:
+      return produce(state, (draft) => {
+        draft.isLoading = false;
+        draft.inputs.password = action.password;
       });
     case FAIL:
       return produce(state, (draft) => {
         draft.isLoading = null;
-        draft.currUser = null;
+        draft.inputs = null;
         draft.isError = action.error;
-      });
-    case NEW_ACCOUNT:
-      return produce(state, (draft) => {
-        draft.newaccount = true;
       });
     default:
       return state;

@@ -41,7 +41,7 @@ export default function Account() {
     } catch (e) {
       dispatch(fail(e));
     }
-    history.push("/login");
+    if (email || password || nickname) history.push("/login");
   };
   return (
     <AuthLayout onCreateAccount={onCreateAccount}>

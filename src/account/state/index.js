@@ -1,10 +1,10 @@
 import produce from "immer";
 
-const REQUEST = "auth/REQUEST";
-const SET_EMAIL = "auth/SET_EMAIL";
-const SET_PASS = "auth/SET_PASS";
-const SET_NICK = "auth/SET_NICK";
-const FAIL = "auth/FAIL";
+const REQUEST = "account/REQUEST";
+const SET_EMAIL = "account/SET_EMAIL";
+const SET_PASS = "account/SET_PASS";
+const SET_NICK = "account/SET_NICK";
+const FAIL = "account/FAIL";
 
 export const request = () => ({ type: REQUEST });
 export const setemail = (email) => ({

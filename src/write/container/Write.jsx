@@ -68,7 +68,7 @@ export default function Write() {
       </Row>
       <Row justify="center" style={{ marginTop: 5 }}>
         <Col span={12}>
-          <Button>작성완료</Button>
+          <Button onClick={() => {}}>작성완료</Button>
         </Col>
       </Row>
     </div>

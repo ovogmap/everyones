@@ -6,11 +6,7 @@ const OUT_CURRUSER = "OUT_CURRUSER";
 export const setUser = (user) => ({ type: SET_CURRUSER, user });
 export const outUser = () => ({ type: OUT_CURRUSER });
 const INITIAL_STATE = {
-  currUser: {
-    email: "",
-    uid: "",
-    displayName: "",
-  },
+  currUser: null,
 };
 
 export default function main(state = INITIAL_STATE, action) {
