@@ -8,9 +8,9 @@ import Login from "./auth/container/Login";
 import Account from "./account/container/Account";
 import { setUser } from "./common/state";
 import { useDispatch, useSelector } from "react-redux";
-import { authService } from "./fbase";
+import { authService, storeService } from "./fbase";
+import { fetchData, endLoading } from "./search/state";
 function App() {
-  const currUser = useSelector((state) => state.main.currUser);
   const dispatch = useDispatch();
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
@@ -23,6 +23,16 @@ function App() {
           })
         );
       }
+    });
+  }, []);
+  useEffect(() => {
+    storeService.collection("posts").onSnapshot((snapshot) => {
+      const newPosts = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      dispatch(fetchData(newPosts));
+      dispatch(endLoading());
     });
   }, []);
   return (

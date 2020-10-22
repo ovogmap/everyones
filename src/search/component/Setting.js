@@ -39,7 +39,6 @@ export default function Setting() {
               </>
             )}
             {currUser && <Menu.Item onClick={onLogout}>로그아웃</Menu.Item>}
-            <Menu.Item onClick={() => {}}>맛집목록</Menu.Item>
             {currUser && (
               <Menu.Item
                 onClick={() => {

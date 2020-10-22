@@ -1,53 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Descriptions, PageHeader, Row, Typography } from "antd";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function Detail({ name }) {
+//파람스를 통해 posts에 filter를 사용해 원하는 객체를 가져오는것은 성공.
+//detail state를 만들어서 변경해야할거 같다.
+export default function Detail({ match }) {
+  const [resultData, setResultData] = useState();
+  const posts = useSelector((state) => state.search.posts);
+  const { name } = match.params;
+  console.log(posts);
+  console.log(resultData);
+  useEffect(() => {
+    const result = posts.filter((item) => item.id === name);
+    const data = result[0];
+    setResultData(data);
+  }, [posts]);
   const history = useHistory();
-
-  const result = {
-    //받아와야할 구조
-    title: "카페 더 나인",
-    Address: "강남역 9번 출구",
-    menu: "아메리카노",
-    lineReview: "괜찮은 카페였다.",
-    review: "",
-  };
   return (
     <>
-      <Row justify="center">
-        <Col span={16}>
-          <PageHeader onBack={() => history.push("/")} title={result.title}>
-            <Descriptions layout="vertical" bordered={true} column={1}>
-              <Descriptions.Item label="가게이름">
-                <Typography.Text>{result.title}</Typography.Text>
-              </Descriptions.Item>
-              <Descriptions.Item label="주소">
-                <Typography.Text>강남역 9번출구</Typography.Text>
-              </Descriptions.Item>
-              <Descriptions.Item label="식사메뉴">
-                <Typography.Text>아메리카노</Typography.Text>
-              </Descriptions.Item>
-              <Descriptions.Item label="한줄평">
-                <Typography.Text>안녕</Typography.Text>
-              </Descriptions.Item>
-              <Descriptions.Item label="맛집 평가">
-                <Typography.Text>
-                  Ant Design, a design language for background applications, is
-                  refined by Ant UED Team. Ant Design, a design language for
-                  background applications, is refined by Ant UED Team. Ant
-                  Design, a design language for background applications, is
-                  refined by Ant UED Team. Ant Design, a design language for
-                  background applications, is refined by Ant UED Team. Ant
-                  Design, a design language for background applications, is
-                  refined by Ant UED Team. Ant Design, a design language for
-                  background applications, is refined by Ant UED Team.
-                </Typography.Text>
-              </Descriptions.Item>
-            </Descriptions>
-          </PageHeader>
-        </Col>
-      </Row>
+      {resultData && (
+        <Row justify="center">
+          <Col span={12}>
+            <PageHeader
+              onBack={() => history.push("/")}
+              title={resultData.name}
+            >
+              <Descriptions
+                style={{ marginTop: "50px" }}
+                layout="vertical"
+                bordered={true}
+                column={1}
+              >
+                <Descriptions.Item label="가게이름">
+                  <Typography.Text>{resultData.name}</Typography.Text>
+                </Descriptions.Item>
+                <Descriptions.Item label="주소">
+                  <Typography.Text>{resultData.address}</Typography.Text>
+                </Descriptions.Item>
+                <Descriptions.Item label="식사메뉴">
+                  <Typography.Text>{resultData.menu}</Typography.Text>
+                </Descriptions.Item>
+                <Descriptions.Item label="한줄평">
+                  <Typography.Text>{resultData.tagline}</Typography.Text>
+                </Descriptions.Item>
+                <Descriptions.Item label="맛집 평가">
+                  <Typography.Text>{resultData.review}</Typography.Text>
+                </Descriptions.Item>
+              </Descriptions>
+            </PageHeader>
+          </Col>
+        </Row>
+      )}
     </>
   );
 }
